@@ -1,7 +1,10 @@
 <script>
+  // import { clickClick, resetGame } from "./api.js";
+
   let currentPlayer = "X";
   let winner = null;
   let board = ["", "", "", "", "", "", "", "", ""];
+  let isDraw = false;
 
   const winningCombinations = [
     [0, 1, 2],
@@ -15,10 +18,15 @@
   ];
 
   function handleClick(index) {
-    if (board[index] || winner) return;
+    if (board[index] || winner || isDraw) return;
 
     board[index] = currentPlayer;
     checkWinner();
+
+    if (!board.includes("")) {
+      isDraw = true;
+      return;
+    }
 
     currentPlayer = currentPlayer === "X" ? "O" : "X";
   }
@@ -38,6 +46,7 @@
     currentPlayer = "X";
     winner = null;
     board = ["", "", "", "", "", "", "", "", ""];
+    isDraw = false;
   }
 </script>
 
@@ -49,6 +58,9 @@
 
 {#if winner}
   <p>Winner: {winner}</p>
+  <button on:click={resetGame}>Play Again</button>
+{:else if isDraw}
+  <p>It's a draw!</p>
   <button on:click={resetGame}>Play Again</button>
 {/if}
 
